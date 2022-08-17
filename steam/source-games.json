@@ -1,0 +1,42 @@
+[
+    {
+        "name": "Counter-Strike: Source",
+        "appid": 240
+    },
+    {
+        "name": "Counter-Strike: Global Offensive",
+        "appid": 730
+    },
+    {
+        "name": "Half-Life 2",
+        "appid": 220
+    },
+    {
+        "name": "Half-Life 2: Deathmatch",
+        "appid": 320
+    },
+    {
+        "name": "Half-Life: Source",
+        "appid": 280
+    },
+    {
+        "name": "Half-Life Deathmatch: Source",
+        "appid": 360
+    },
+    {
+        "name": "Day of Defeat: Source",
+        "appid": 300
+    },
+    {
+        "name": "Team Fortress 2",
+        "appid": 440
+    },
+    {
+        "name": "Left 4 Dead 2",
+        "appid": 550
+    },
+    {
+        "name": "Garry's Mod",
+        "appid": 4000
+    }
+]

@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Server status</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet"
+        integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
+</head>
+
+<body>
+    <div class="container">
+        <h3 class="text-center">SOURCE SERVER STATUS</h3>
+        <div class="form controll mx-auto text-center">
+            <label for="address">Server address:</label>
+            <input type="text" id="address" name="address">
+            <button class="btn btn-dark" type="button" id="search-btn">Search</button>
+        </div>
+        <table class="table table-striped">
+            <thead>
+                <tr>
+                    <th scope="col">NAME</th>
+                    <th scope="col">ADDRESS</th>
+                    <th scope="col">GAME</th>
+                    <th scope="col">MAP</th>
+                    <th scope="col">ONLINE</th>
+                </tr>
+            </thead>
+            <tbody id="server-table"></tbody>
+        </table>
+    </div>
+    <template id="server-template">
+        <tr>
+            <th scope="row" class="name"></th>
+            <td><a class="address"></a></td>
+            <td class="game"></td>
+            <td class="map"></td>
+            <td class="online"></td>
+        </tr>
+    </template>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js"
+        integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM"
+        crossorigin="anonymous"></script>
+    <script>
+        const input = document.getElementById('address');
+        const button = document.getElementById('search-btn');
+        const table = document.getElementById('server-table');
+        const template = document.getElementById('server-template');
+
+        // Button on click
+        button.addEventListener('click', function () {
+            window.location.href = "?addr=" + input.value;
+        });
+
+        // Autoclick button on enter
+        input.addEventListener('keypress', function() {
+            if (event.key === "Enter") {
+                event.preventDefault();
+                button.click();
+            }
+        });
+
+        // Reading query params
+        const base = 'https://api.pequla.com/steam/server';
+        const params = new URLSearchParams(location.search);
+        const addr = params.get('addr');
+        if (addr) {
+            // Address is defined
+            input.value = addr
+            getStatus(fetch(base+`?addr=${addr}`));
+        } else {
+            getStatus(fetch(base));
+        }
+
+        function getStatus(fetchCall) {
+            fetchCall
+                .then(rsp => rsp.json())
+                .then(data =>
+                    data.servers.forEach(server => {
+                        const copy = template.content.cloneNode(true);
+                        copy.querySelector(".name").innerText = server.name;
+
+                        const address = copy.querySelector(".address")
+                        address.innerText = server.addr;
+                        address.href = `steam://connect/${server.addr}`;
+
+                        copy.querySelector(".game").innerText = `${server.gamedir} v${server.version}`;
+                        copy.querySelector(".map").innerText = server.map;
+                        copy.querySelector(".online").innerText = `${server.players}/${server.max_players} - ${server.bots} bots`;
+
+                        // append to container
+                        table.appendChild(copy);
+                    })
+                )
+        }
+    </script>
+</body>
+
+</html>

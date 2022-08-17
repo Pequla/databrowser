@@ -1,0 +1,145 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SuperLink :: Discord</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet"
+        integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
+</head>
+
+<body>
+    <div class="container">
+        <h3>SuperLink - Discord data</h3>
+        <hr />
+        <table class="table table-striped">
+            <tr>
+                <th>ID</th>
+                <th id="data-id"></th>
+            </tr>
+            <tr>
+                <th>DISCORD ID</th>
+                <th id="discord-id"></th>
+            </tr>
+            <tr>
+                <th>GUILD ID</th>
+                <th id="guild-id"></th>
+            </tr>
+            <tr>
+                <th>MINECRAFT ID</th>
+                <th id="uuid"></th>
+            </tr>
+            <tr>
+                <th>AVATAR</th>
+                <th id="avatar"></th>
+            </tr>
+            <tr>
+                <th>DISCORD NAME</th>
+                <th id="discord-name"></th>
+            </tr>
+            <tr>
+                <th>MINECRAFT NAME</th>
+                <th id="minecraft-name"></th>
+            </tr>
+            <tr>
+                <th>CREATED AT</th>
+                <th id="created"></th>
+            </tr>
+            <tr>
+                <th>SKIN</th>
+                <th id="minecraft-skin"></th>
+            </tr>
+        </table>
+        <h3>Account History</h3>
+        <table class="table table-striped">
+            <thead>
+                <tr>
+                    <th scope="col">ID</th>
+                    <th scope="col">MINECRAFT NAME</th>
+                    <th scope="col">GUILD ID</th>
+                    <th scope="col">CREATED AT</th>
+                </tr>
+            </thead>
+            <tbody id="history-table"></tbody>
+        </table>
+    </div>
+    <template id="history-template">
+        <tr>
+            <th scope="row" class="data-id"></th>
+            <td><a class="name"></a></td>
+            <td class="guild"></td>
+            <td class="created"></td>
+        </tr>
+    </template>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js"
+        integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM"
+        crossorigin="anonymous"></script>
+    <script>
+        const params = new URLSearchParams(location.search);
+        let discordId = 358236836113547265
+        if (params.has('id')) discordId = params.get('id');
+
+        fetch('https://link.samifying.com/api/data/discord/' + discordId)
+            .then(rsp => rsp.json())
+            .then(data => {
+                document.getElementById('data-id').innerText = data.id;
+                document.getElementById('discord-id').innerText = data.user.discordId;
+                document.getElementById('guild-id').innerText = data.guild.discordId;
+                document.getElementById('uuid').innerText = data.uuid;
+                document.getElementById('created').innerText = new Date(data.createdAt);
+                const avatar = document.getElementById('avatar');
+
+                fetch('https://link.samifying.com/api/user/' + data.uuid)
+                    .then(rsp => rsp.json())
+                    .then(user => {
+                        appendImage(avatar, user.avatar, user.name);
+                        document.getElementById('discord-name').innerText = user.name;
+                    });
+
+                fetch('https://link.samifying.com/api/cache/uuid/' + data.uuid)
+                    .then(rsp => rsp.json())
+                    .then(mc => {
+                        appendImage(avatar, 'https://visage.surgeplay.com/face/' + mc.id, mc.name);
+                        document.getElementById('minecraft-name').innerText = mc.name;
+                        appendImage(document.getElementById('minecraft-skin'),
+                            'https://visage.surgeplay.com/full/' + mc.id, mc.name + "'s skin", 128);
+                    });
+            });
+
+        fetch(`https://link.samifying.com/api/data/discord/${discordId}/history`)
+            .then(rsp => rsp.json())
+            .then(history => {
+                const table = document.getElementById('history-table');
+                const template = document.getElementById('history-template');
+
+                history.forEach(record => {
+                    const copy = template.content.cloneNode(true);
+                    copy.querySelector(".data-id").innerText = record.id;
+
+                    const name = copy.querySelector('.name');
+                    fetch(`https://link.samifying.com/api/cache/uuid/${record.uuid}?ignore=1`)
+                        .then(rsp => rsp.json())
+                        .then(mc => {
+                            name.innerText = mc.name;
+                            name.href = 'https://namemc.com/profile/' + mc.id;
+                    });
+
+                    copy.querySelector('.guild').innerText = record.guild.discordId;
+                    copy.querySelector('.created').innerText = new Date(record.createdAt).toDateString();
+                    table.appendChild(copy);
+                });
+            })
+
+        function appendImage(parent, url, alt, size = 64) {
+            const img = document.createElement('img');
+            img.src = url;
+            img.alt = alt;
+            img.width = size;
+            parent.appendChild(img);
+        }
+    </script>
+</body>
+
+</html>

@@ -1,0 +1,129 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SuperLink :: All links</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet"
+        integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
+</head>
+
+<body>
+    <div class="container">
+        <h3 class="text-center">SuperLink - All links</h3>
+        <nav aria-label="...">
+            <ul class="pagination">
+                <li class="page-item" id="pg-prev">
+                    <a class="page-link" href="#" tabindex="-1" id="pg-prev-href">Previous</a>
+                </li>
+                <li class="page-item" id="pg-first">
+                    <a class="page-link" href="?page=1">1</a>
+                </li>
+                <li class="page-item active">
+                    <a class="page-link" href="#" id="pg-current">2</a>
+                </li>
+                <li class="page-item">
+                    <a class="page-link" href="#" id="pg-last">3</a>
+                </li>
+                <li class="page-item" id="pg-next">
+                    <a class="page-link" href="#" id="pg-next-href">Next</a>
+                </li>
+            </ul>
+        </nav>
+        <hr />
+        <table class="table table-striped">
+            <thead>
+                <tr>
+                    <th scope="col">ID</th>
+                    <th scope="col">MINECRAFT NAME</th>
+                    <th scope="col">DISCORD NAME</th>
+                    <th scope="col">GUILD ID</th>
+                    <th scope="col">CREATED AT</th>
+                </tr>
+            </thead>
+            <tbody id="link-table"></tbody>
+        </table>
+    </div>
+    <template id="link-template">
+        <tr>
+            <th scope="row" class="id"></th>
+            <td><a class="name"></a></td>
+            <td><a class="discord"></a></td>
+            <td class="guild"></td>
+            <td class="created"></td>
+        </tr>
+    </template>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js"
+        integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM"
+        crossorigin="anonymous"></script>
+    <script>
+        const table = document.getElementById('link-table');
+        const template = document.getElementById('link-template');
+
+        // Pagination
+        const previous = document.getElementById('pg-prev');
+        const current = document.getElementById('pg-current');
+        const last = document.getElementById('pg-last');
+        const next = document.getElementById('pg-next');
+
+        // Reading page from query params
+        const params = new URLSearchParams(location.search);
+        const page = params.get('page');
+        let currentPage = 0;
+        if (params.has('page')) currentPage = params.get('page') - 1;
+
+        fetch('https://link.samifying.com/api/data?size=20&page=' + currentPage)
+            .then(rsp => rsp.json())
+            .then(data => {
+                // Updating paginator
+                if (data.first) {
+                    previous.classList.add('disabled');
+                    document.getElementById('pg-first').hidden = true;
+                } else {
+                    document.getElementById('pg-prev-href').href = '?page=' + data.number;
+                }
+
+
+                if (data.last) {
+                    next.classList.add('disabled');
+                    last.hidden = true;
+                } else {
+                    document.getElementById('pg-next-href').href = '?page=' + (data.number + 2);
+                }
+
+                current.innerText = data.number + 1;
+                current.href = '?page=' + (data.number + 1);
+
+                last.innerHTML = data.totalPages;
+                last.href = '?page=' + data.totalPages;
+
+                // List in table
+                data.content.forEach(link => {
+                    const copy = template.content.cloneNode(true);
+                    copy.querySelector('.id').innerText = link.id;
+
+                    // Minecraft Username
+                    const name = copy.querySelector(".name");
+                    name.href = 'https://namemc.com/profile/' + link.uuid;
+                    fetch(`https://link.samifying.com/api/cache/uuid/${link.uuid}?ignore=1`)
+                        .then(rsp => rsp.json())
+                        .then(cache => name.innerText = cache.name);
+
+                    // Discord Username
+                    const discord = copy.querySelector(".discord");
+                    discord.href = './data-discord.html?id=' + link.user.discordId;
+                    fetch('https://link.samifying.com/api/user/' + link.uuid)
+                        .then(rsp => rsp.json())
+                        .then(user => discord.innerText = user.name);
+
+                    copy.querySelector(".guild").innerText = link.guild.discordId;
+                    copy.querySelector(".created").innerText = new Date(link.createdAt).toDateString();
+                    table.appendChild(copy);
+                });
+            });
+    </script>
+</body>
+
+</html>
