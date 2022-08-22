@@ -78,7 +78,7 @@
         crossorigin="anonymous"></script>
     <script>
         const params = new URLSearchParams(location.search);
-        let discordId = 358236836113547265
+        let discordId = '358236836113547265'
         if (params.has('id')) discordId = params.get('id');
 
         fetch('https://link.samifying.com/api/data/discord/' + discordId)
