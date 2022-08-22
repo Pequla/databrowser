@@ -67,6 +67,19 @@
         let addr = 'atm7s.g.akliz.net'
         if (params.has('addr')) addr = params.get('addr');
 
+        const input = document.getElementById('address');
+        const button = document.getElementById('query');
+        button.addEventListener('click', function () {
+            window.location.href = '?addr=' + input.value;
+        });
+
+        input.addEventListener('keypress', function() {
+            if (event.key === "Enter") {
+                event.preventDefault();
+                button.click();
+            }
+        });
+
         fetch('https://link.samifying.com/api/status/' + addr)
             .then(rsp => rsp.json())
             .then(data => {
@@ -84,7 +97,9 @@
                     data.players.sample.forEach(player => {
                         const copy = template.content.cloneNode(true);
                         appendImage(copy.querySelector(".avatar"), 'https://visage.surgeplay.com/face/' + player.id);
-                        copy.querySelector('.name').innerText = player.name;
+                        const name = copy.querySelector('.name');
+                        name.innerText = player.name;
+                        name.href = 'https://namemc.com/profile/' + player.id;
                         copy.querySelector('.uuid').innerText = player.id;
                         table.appendChild(copy);
                     });
