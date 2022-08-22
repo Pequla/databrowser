@@ -87,7 +87,7 @@
                 document.getElementById('d-address').innerText = addr;
                 document.getElementById('online').innerText = data.players.online;
                 document.getElementById('max').innerText = data.players.max;
-                document.getElementById('version').innerText = version.name;
+                document.getElementById('version').innerText = data.version.name;
 
                 if (data.players.sample) {
                     document.getElementById('players').hidden = false;
