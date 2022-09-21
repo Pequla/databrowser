@@ -65,8 +65,8 @@
                     </li>
                 </ul>
                 <div class="d-flex">
-                    <input class="form-control me-2" type="search" placeholder="Search" aria-label="Search">
-                    <button class="btn btn-outline-success" type="button">Search</button>
+                    <input class="form-control me-2" type="search" placeholder="Username" aria-label="Username" id="lookup-input">
+                    <button class="btn btn-outline-success" type="button" id="lookup-btn">Search</button>
                 </div>
             </div>
         </div>
@@ -81,7 +81,7 @@
         </nav>
         <h3 class="p-0 m-0">Minecraft Server Status</h3>
         <p class="p-0">Find all details about a Minecraft Server</p>
-        <div class="mx-auto text-center">
+        <div>
             <label for="address">Server IP:</label>
             <input type="text" name="address" id="address" />
             <button type="button" id="query" class="btn btn-dark">Query</button>
@@ -135,6 +135,7 @@
         </tr>
     </template>
     <script src="./assets/js/bootstrap.bundle.min.js"></script>
+    <script src="./assets/js/main.js"></script>
     <script>
         const params = new URLSearchParams(location.search);
         let addr = 'atm7s.g.akliz.net'

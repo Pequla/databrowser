@@ -66,8 +66,8 @@
                     </li>
                 </ul>
                 <div class="d-flex">
-                    <input class="form-control me-2" type="search" placeholder="Search" aria-label="Search">
-                    <button class="btn btn-outline-success" type="button">Search</button>
+                    <input class="form-control me-2" type="search" placeholder="Username" aria-label="Username" id="lookup-input">
+                    <button class="btn btn-outline-success" type="button" id="lookup-btn">Search</button>
                 </div>
             </div>
         </div>
@@ -147,6 +147,7 @@
         </tr>
     </template>
     <script src="./assets/js/bootstrap.bundle.min.js"></script>
+    <script src="./assets/js/main.js"></script>
     <script>
         const params = new URLSearchParams(location.search);
         let discordId = '358236836113547265'

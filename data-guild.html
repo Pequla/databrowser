@@ -5,7 +5,7 @@
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>All :: DataBrowser</title>
+    <title>Guild :: DataBrowser</title>
     <link href="../assets/css/bootstrap.min.css" rel="stylesheet">
     <link rel="icon" type="image/x-icon" href="../assets/img/detective.png">
 </head>
@@ -66,8 +66,8 @@
                     </li>
                 </ul>
                 <div class="d-flex">
-                    <input class="form-control me-2" type="search" placeholder="Search" aria-label="Search">
-                    <button class="btn btn-outline-success" type="button">Search</button>
+                    <input class="form-control me-2" type="search" placeholder="Username" aria-label="Username" id="lookup-input">
+                    <button class="btn btn-outline-success" type="button" id="lookup-btn">Search</button>
                 </div>
             </div>
         </div>
@@ -76,10 +76,11 @@
         <nav aria-label="breadcrumb">
             <ol class="breadcrumb">
                 <li class="breadcrumb-item"><a href="./index.html">Home</a></li>
-                <li class="breadcrumb-item active" aria-current="page">All</li>
+                <li class="breadcrumb-item" aria-current="page">Guild</li>
+                <li class="breadcrumb-item active" aria-current="page" id="guild-nav">N/A</li>
             </ol>
         </nav>
-        <h3>All Data</h3>
+        <h3>Guild data</h3>
         <nav aria-label="...">
             <ul class="pagination">
                 <li class="page-item" id="pg-prev">
@@ -106,7 +107,6 @@
                     <th scope="col">ID</th>
                     <th scope="col">MINECRAFT NAME</th>
                     <th scope="col">DISCORD NAME</th>
-                    <th scope="col">GUILD ID</th>
                     <th scope="col">CREATED AT</th>
                 </tr>
             </thead>
@@ -123,7 +123,6 @@
             <th scope="row" class="id"></th>
             <td><a class="name"></a></td>
             <td><a class="discord"></a></td>
-            <td><a class="guild"></a></td>
             <td class="created"></td>
         </tr>
     </template>
@@ -145,7 +144,12 @@
         let currentPage = 0;
         if (params.has('page')) currentPage = params.get('page') - 1;
 
-        fetch('https://link.samifying.com/api/data?size=12&page=' + currentPage)
+        // Reading guild
+        let guild = '264801645370671114';
+        if (params.has('guild')) guild = params.get('guild');
+        document.getElementById('guild-nav').innerText = guild;
+
+        fetch(`https://link.samifying.com/api/data/guild/${guild}?size=12&page=${currentPage}`)
             .then(rsp => rsp.json())
             .then(data => {
                 // Updating paginator
@@ -153,7 +157,7 @@
                     previous.classList.add('disabled');
                     document.getElementById('pg-first').hidden = true;
                 } else {
-                    document.getElementById('pg-prev-href').href = '?page=' + data.number;
+                    document.getElementById('pg-prev-href').href = '?page=' + data.number + '&guild=' + guild;
                 }
 
 
@@ -161,14 +165,14 @@
                     next.classList.add('disabled');
                     last.hidden = true;
                 } else {
-                    document.getElementById('pg-next-href').href = '?page=' + (data.number + 2);
+                    document.getElementById('pg-next-href').href = '?page=' + (data.number + 2) + '&guild=' + guild;
                 }
 
                 current.innerText = data.number + 1;
-                current.href = '?page=' + (data.number + 1);
+                current.href = '?page=' + (data.number + 1) + '&guild=' + guild;
 
                 last.innerHTML = data.totalPages;
-                last.href = '?page=' + data.totalPages;
+                last.href = '?page=' + data.totalPages + '&guild=' + guild;
 
                 // List in table
                 data.content.forEach(link => {
@@ -189,9 +193,6 @@
                         .then(rsp => rsp.json())
                         .then(user => discord.innerText = user.name);
 
-                    const guild = copy.querySelector(".guild")
-                    guild.innerText = link.guild.discordId;
-                    guild.href = './data-guild.html?guild=' + link.guild.discordId;
                     copy.querySelector(".created").innerText = new Date(link.createdAt).toDateString();
                     table.appendChild(copy);
                 });
