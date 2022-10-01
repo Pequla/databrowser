@@ -3,11 +3,13 @@ window.onload = function () {
     const button = document.getElementById('lookup-btn');
 
     button.addEventListener('click', () => {
-        fetch('https://link.samifying.com/api/lookup/' + input.value).then(rsp => {
-            if (rsp.ok) return rsp.json();
-            throw new Error("Player with name " + input.value + " was not found")
-        }).then(data => {
-            window.location.href = './data-discord.html?id=' + data.id;
-        })
+        fetch('https://link.samifying.com/api/lookup/' + input.value)
+            .then(rsp => {
+                if (rsp.ok) return rsp.json();
+                window.location.href = './no-player.html?q=' + input.value;
+            })
+            .then(data => {
+                window.location.href = './data-discord.html?id=' + data.id;
+            })
     });
 }

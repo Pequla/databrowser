@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>No Player :: DataBrowser</title>
+    <link href="./assets/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="icon" type="image/x-icon" href="./assets/img/detective.png">
+</head>
+
+<body>
+    <nav class="navbar navbar-expand-lg navbar-light bg-light">
+        <div class="container-fluid">
+            <a class="navbar-brand" href="./index.html">DataBrowser</a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse"
+                data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false"
+                aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarSupportedContent">
+                <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+                    <li class="nav-item">
+                        <a class="nav-link" aria-current="page" href="./index.html">Home</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" aria-current="page" href="https://github.com/Pequla/databrowser"
+                            target="_blank">Source
+                            Code</a>
+                    </li>
+                    <li class="nav-item dropdown">
+                        <a class="nav-link dropdown-toggle" href="#" id="steamDropdown" role="button"
+                            data-bs-toggle="dropdown" aria-expanded="false">
+                            Steam
+                        </a>
+                        <ul class="dropdown-menu" aria-labelledby="steamDropdown">
+                            <li><a class="dropdown-item" href="./steam/game.html">Game Status</a></li>
+                            <li><a class="dropdown-item" href="./steam/server.html">Server Status</a></li>
+                        </ul>
+                    </li>
+                    <li class="nav-item dropdown">
+                        <a class="nav-link dropdown-toggle" href="#" id="linkDropdown" role="button"
+                            data-bs-toggle="dropdown" aria-expanded="false">
+                            Super Link
+                        </a>
+                        <ul class="dropdown-menu" aria-labelledby="linkDropdown">
+                            <li><a class="dropdown-item" href="./info.html">App Inforamtion</a></li>
+                            <li><a class="dropdown-item" href="./all.html">All Data</a></li>
+                            <li><a class="dropdown-item" href="./data-discord.html">Discord User Data</a></li>
+                            <li><a class="dropdown-item" href="./data-guild.html">Discord Server Data</a></li>
+                            <li><a class="dropdown-item" href="./server-status.html">Minecraft Server Status</a></li>
+                        </ul>
+                    </li>
+                    <li class="nav-item dropdown">
+                        <a class="nav-link dropdown-toggle" href="#" id="lunaDropdown" role="button"
+                            data-bs-toggle="dropdown" aria-expanded="false">
+                            Luna SMP
+                        </a>
+                        <ul class="dropdown-menu" aria-labelledby="lunaDropdown">
+                            <li><a class="dropdown-item" href="./lunasmp/index.html">Server Status</a></li>
+                            <li><a class="dropdown-item"
+                                    href="./lunasmp/player.html?uuid=b923be45-9b95-4086-8afc-8e683c0e94ff">Player
+                                    Details</a></li>
+                        </ul>
+                    </li>
+                </ul>
+                <div class="d-flex">
+                    <input class="form-control me-2" type="search" placeholder="Username" aria-label="Username"
+                        id="lookup-input">
+                    <button class="btn btn-outline-success" type="button" id="lookup-btn">Search</button>
+                </div>
+            </div>
+        </div>
+    </nav>
+    <div class="container">
+        <div class="text-center pt-2">
+            <h3>Sorry, the player was not found</h3>
+            <p>No data for <span id="query">player</span>! You could have made a typo or the user never linked there
+                proffile.</p>
+        </div>
+        <footer class="text-center">
+            <p>Designed by <a href="https://github.com/Pequla">Pequla</a> | Powered by <a
+                    href="https://getbootstrap.com/">Boostrap v5.0.2</a> & <a href="https://pages.github.com/">Github
+                    Pages</a></p>
+        </footer>
+    </div>
+    <script src="./assets/js/main.js"></script>
+    <script src="./assets/js/bootstrap.bundle.min.js"></script>
+    <script>
+        const params = new URLSearchParams(location.search);
+        if (params.has('q')) {
+            document.getElementById('query').innerText = params.get('q');
+        }
+    </script>
+</body>
+
+</html>
