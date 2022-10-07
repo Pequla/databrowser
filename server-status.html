@@ -155,7 +155,10 @@
         });
 
         fetch('https://link.samifying.com/api/status/' + addr)
-            .then(rsp => rsp.json())
+        .then(rsp => {
+                if (rsp.ok) return rsp.json();
+                window.location.href = `./${rsp.status}.html`;
+            })
             .then(data => {
                 appendImage(document.getElementById('icon'), data.favicon);
                 document.getElementById('d-address').innerText = addr;

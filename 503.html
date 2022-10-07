@@ -1,15 +1,13 @@
 <!DOCTYPE html>
 <html lang="en">
-
 <head>
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Info :: DataBrowser</title>
-    <link href="../assets/css/bootstrap.min.css" rel="stylesheet">
-    <link rel="icon" type="image/x-icon" href="../assets/img/detective.png">
+    <title>Unavailable :: DataBrowser</title>
+    <link href="./assets/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="icon" type="image/x-icon" href="./assets/img/detective.png">
 </head>
-
 <body>
     <nav class="navbar navbar-expand-lg navbar-light bg-light">
         <div class="container-fluid">
@@ -74,97 +72,23 @@
         </div>
     </nav>
     <div class="container">
-        <nav aria-label="breadcrumb">
-            <ol class="breadcrumb">
-                <li class="breadcrumb-item"><a href="./index.html">Home</a></li>
-                <li class="breadcrumb-item active" aria-current="page">Info</li>
-            </ol>
-        </nav>
-        <h3>Super Link Information</h3>
-        <p>Current bot status</p>
-        <hr />
-        <table class="table table-striped">
-            <tr>
-                <th>APP ID</th>
-                <th id="id"></th>
-            </tr>
-            <tr>
-                <th>NAME</th>
-                <th id="name"></th>
-            </tr>
-            <tr>
-                <th>SERVER COUNT</th>
-                <th id="guilds"></th>
-            </tr>
-            <tr>
-                <th>ACOUNT LINKS</th>
-                <th id="links"></th>
-            </tr>
-        </table>
-        <h3>Discord servers</h3>
-        <hr />
-        <table class="table table-striped">
-            <thead>
-                <tr>
-                    <th scope="col">SERVER ICON</th>
-                    <th scope="col">SERVER NAME</th>
-                    <th scope="col">ID</th>
-                </tr>
-            </thead>
-            <tbody id="guild-table"></tbody>
-        </table>
+        <div class="d-flex align-items-center justify-content-center vh-100">
+            <div class="text-center">
+                <h1 class="display-1 fw-bold">503</h1>
+                <p class="fs-3"> <span class="text-danger">Opps!</span> Service unavailable</p>
+                <p class="lead">
+                    The app just crashed or we are doing maintenance. Please come back later!
+                </p>
+                <a href="./index.html" class="btn btn-primary">Go Home</a>
+            </div>
+        </div>
         <footer class="text-center">
             <p>Designed by <a href="https://github.com/Pequla">Pequla</a> | Powered by <a
                     href="https://getbootstrap.com/">Boostrap v5.0.2</a> & <a href="https://pages.github.com/">Github
                     Pages</a></p>
         </footer>
     </div>
-    <template id="guild-template">
-        <tr>
-            <th scope="row"><img class="icon" /></th>
-            <td class="name"></td>
-            <td class="id"></td>
-        </tr>
-    </template>
-    <script src="./assets/js/bootstrap.bundle.min.js"></script>
     <script src="./assets/js/main.js"></script>
-    <script>
-        fetch('https://link.samifying.com/api/info')
-            .then(rsp => {
-                if (rsp.ok) return rsp.json();
-                window.location.href = `./${rsp.status}.html`;
-            })
-            .then(data => {
-                document.getElementById('id').innerText = data.id;
-                document.getElementById('name').innerText = data.name;
-                document.getElementById('guilds').innerText = data.serverCount;
-                document.getElementById('links').innerText = data.totalAccountLinks;
-            });
-
-        fetch('https://link.samifying.com/api/info/guilds')
-            .then(rsp => {
-                if (rsp.ok) return rsp.json();
-                window.location.href = `./${rsp.status}.html`;
-            })
-            .then(data => {
-                const table = document.getElementById('guild-table');
-                const template = document.getElementById('guild-template');
-                data.forEach(guild => {
-                    const copy = template.content.cloneNode(true);
-                    const icon = copy.querySelector('.icon');
-                    if (!guild.iconUrl) {
-                        // If there is no icon
-                        guild.iconUrl = './assets/img/discord.png';
-                    }
-                    icon.src = guild.iconUrl;
-                    icon.alt = guild.name;
-                    icon.width = 64;
-                    copy.querySelector('.name').innerText = guild.name;
-                    copy.querySelector('.id').innerText = guild.id;
-                    table.appendChild(copy);
-                });
-            });
-    </script>
+    <script src="./assets/js/bootstrap.bundle.min.js"></script>
 </body>
-
 </html>

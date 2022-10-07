@@ -66,7 +66,8 @@
                     </li>
                 </ul>
                 <div class="d-flex">
-                    <input class="form-control me-2" type="search" placeholder="Username" aria-label="Username" id="lookup-input">
+                    <input class="form-control me-2" type="search" placeholder="Username" aria-label="Username"
+                        id="lookup-input">
                     <button class="btn btn-outline-success" type="button" id="lookup-btn">Search</button>
                 </div>
             </div>
@@ -154,7 +155,10 @@
         if (params.has('id')) discordId = params.get('id');
 
         fetch('https://link.samifying.com/api/data/discord/' + discordId)
-            .then(rsp => rsp.json())
+            .then(rsp => {
+                if (rsp.ok) return rsp.json();
+                window.location.href = `./${rsp.status}.html`;
+            })
             .then(data => {
                 document.getElementById('data-id').innerText = data.id;
                 document.getElementById('discord-id').innerText = data.user.discordId;
@@ -165,14 +169,20 @@
                 const avatar = document.getElementById('avatar');
 
                 fetch('https://link.samifying.com/api/user/' + data.uuid)
-                    .then(rsp => rsp.json())
+                    .then(rsp => {
+                        if (rsp.ok) return rsp.json();
+                        window.location.href = `./${rsp.status}.html`;
+                    })
                     .then(user => {
                         appendImage(avatar, user.avatar, user.name);
                         document.getElementById('discord-name').innerText = user.name;
                     });
 
                 fetch('https://link.samifying.com/api/cache/uuid/' + data.uuid)
-                    .then(rsp => rsp.json())
+                    .then(rsp => {
+                        if (rsp.ok) return rsp.json();
+                        window.location.href = `./${rsp.status}.html`;
+                    })
                     .then(mc => {
                         appendImage(avatar, 'https://visage.surgeplay.com/face/' + mc.id, mc.name);
                         document.getElementById('minecraft-name').innerText = mc.name;
@@ -182,7 +192,10 @@
             });
 
         fetch(`https://link.samifying.com/api/data/discord/${discordId}/history`)
-            .then(rsp => rsp.json())
+            .then(rsp => {
+                if (rsp.ok) return rsp.json();
+                window.location.href = `./${rsp.status}.html`;
+            })
             .then(history => {
                 const table = document.getElementById('history-table');
                 const template = document.getElementById('history-template');

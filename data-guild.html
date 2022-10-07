@@ -66,7 +66,8 @@
                     </li>
                 </ul>
                 <div class="d-flex">
-                    <input class="form-control me-2" type="search" placeholder="Username" aria-label="Username" id="lookup-input">
+                    <input class="form-control me-2" type="search" placeholder="Username" aria-label="Username"
+                        id="lookup-input">
                     <button class="btn btn-outline-success" type="button" id="lookup-btn">Search</button>
                 </div>
             </div>
@@ -150,7 +151,10 @@
         document.getElementById('guild-nav').innerText = guild;
 
         fetch(`https://link.samifying.com/api/data/guild/${guild}?size=12&page=${currentPage}`)
-            .then(rsp => rsp.json())
+            .then(rsp => {
+                if (rsp.ok) return rsp.json();
+                window.location.href = `./${rsp.status}.html`;
+            })
             .then(data => {
                 // Updating paginator
                 if (data.first) {
@@ -183,14 +187,20 @@
                     const name = copy.querySelector(".name");
                     name.href = 'https://namemc.com/profile/' + link.uuid;
                     fetch(`https://link.samifying.com/api/cache/uuid/${link.uuid}?ignore=1`)
-                        .then(rsp => rsp.json())
+                        .then(rsp => {
+                            if (rsp.ok) return rsp.json();
+                            window.location.href = `./${rsp.status}.html`;
+                        })
                         .then(cache => name.innerText = cache.name);
 
                     // Discord Username
                     const discord = copy.querySelector(".discord");
                     discord.href = './data-discord.html?id=' + link.user.discordId;
                     fetch('https://link.samifying.com/api/user/' + link.uuid)
-                        .then(rsp => rsp.json())
+                        .then(rsp => {
+                            if (rsp.ok) return rsp.json();
+                            window.location.href = `./${rsp.status}.html`;
+                        })
                         .then(user => discord.innerText = user.name);
 
                     copy.querySelector(".created").innerText = new Date(link.createdAt).toDateString();
