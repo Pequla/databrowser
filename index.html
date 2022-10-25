@@ -26,7 +26,8 @@
                         <a class="nav-link" aria-current="page" href="./index.html">Home</a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link" aria-current="page" href="https://github.com/Pequla/databrowser" target="_blank">Source
+                        <a class="nav-link" aria-current="page" href="https://github.com/Pequla/databrowser"
+                            target="_blank">Source
                             Code</a>
                     </li>
                     <li class="nav-item dropdown">
@@ -66,13 +67,20 @@
                     </li>
                 </ul>
                 <div class="d-flex">
-                    <input class="form-control me-2" type="search" placeholder="Username" aria-label="Username" id="lookup-input">
+                    <input class="form-control me-2" type="search" placeholder="Username" aria-label="Username"
+                        id="lookup-input">
                     <button class="btn btn-outline-success" type="button" id="lookup-btn">Search</button>
                 </div>
             </div>
         </div>
     </nav>
     <div class="container">
+        <div class="py-3">
+            <h5>Find User for Discord ID</h5>
+            <label for="discord-user-id">Discord ID:</label>
+            <input id="discord-user-id" placeholder="358236836113547265" type="number">
+            <button button="button" id="discord-user-id-submit">Find</button>
+        </div>
         <h3>Page Index:</h3>
         <ul>
             <li>
@@ -102,6 +110,25 @@
     </div>
     <script src="./assets/js/main.js"></script>
     <script src="./assets/js/bootstrap.bundle.min.js"></script>
+    <script>
+        const btn = document.getElementById('discord-user-id-submit')
+        const id = document.getElementById('discord-user-id')
+
+        btn.onclick = function () {
+            if (id.value && id.value !== "") {
+                window.location.href = './data-discord.html?id=' + id.value;
+                return
+            } 
+            alert("That is not a valid id")
+        }
+
+        id.onkeypress = function (e) {
+            if (e.key === "Enter") {
+                event.preventDefault()
+                btn.click()
+            }
+        }
+    </script>
 </body>
 
 </html>
